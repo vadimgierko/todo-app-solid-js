@@ -1,17 +1,19 @@
 {
   "name": "todo-app-solid-js",
+  "private": true,
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev",
-    "build": "vinxi build",
-    "start": "node ./.output/server/index.mjs"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@solidjs/start": "^0.4.2",
-    "solid-js": "^1.8.7",
-    "vinxi": "0.0.54"
+    "solid-js": "^1.8.7"
   },
-  "engines": {
-    "node": ">=18"
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8",
+    "vite-plugin-solid": "^2.8.0"
   }
 }

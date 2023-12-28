@@ -1,13 +1,13 @@
-// @refresh reload
-
-import "./app.css";
+import "./App.css";
 import Layout from "./layout";
 import TodoList from "./components/TodoList";
 
-export default function App() {
+function App() {
 	return (
 		<Layout>
 			<TodoList />
 		</Layout>
 	);
 }
+
+export default App;

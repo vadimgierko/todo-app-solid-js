@@ -1,8 +1,4 @@
-import { children } from "solid-js";
-
 export default function Layout(props: any) {
-	//const c = children(() => props.children);
-
 	return (
 		<div class="layout">
 			<div class="navbar">
