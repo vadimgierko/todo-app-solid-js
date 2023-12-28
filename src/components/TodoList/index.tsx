@@ -5,24 +5,40 @@ import {
 	Index,
 	onMount,
 	createEffect,
+	batch,
 } from "solid-js";
 
 export default function TodoList() {
 	const [todos, setTodos] = createSignal([] as string[]);
+	const [newTodo, setNewTodo] = createSignal("");
 
-	function addTodo() {
-		const newTodo = prompt("Input your new todo");
+	//======================= CRUD =======================//
 
-		if (!newTodo) return;
+	function addTodo(e: SubmitEvent) {
+		e.preventDefault();
 
-		setTodos((t) => [...t, newTodo]);
+		console.log(newTodo());
+
+		if (!newTodo() || !newTodo().trim().length)
+			return alert(
+				"You didn't provide new todo! Cannot add new todo... Try again!"
+			);
+
+		batch(() => {
+			setTodos((t) => [...t, newTodo()]);
+			setNewTodo("");
+		});
 	}
 
 	function deleteTodo(index: number) {
 		setTodos((t) => t.filter((t, i) => i !== index));
 	}
 
-	onMount(() => {
+	//===================== CRUD END ====================//
+
+	//=================== LOCAL STORAGE ==================//
+
+	function fetchTodosFromLocalStorage() {
 		const todosFromLocalStorage = localStorage.getItem("todos");
 
 		if (!todosFromLocalStorage) {
@@ -32,15 +48,30 @@ export default function TodoList() {
 			console.log("There are todos in local storage:", todosFromLocalStorage);
 			setTodos(JSON.parse(todosFromLocalStorage));
 		}
-	});
+	}
 
-	createEffect(() => localStorage.setItem("todos", JSON.stringify(todos())));
+	function updateTodosInLocalStorage() {
+		localStorage.setItem("todos", JSON.stringify(todos()));
+	}
+
+	//================= LOCAL STORAGE END ================//
+
+	onMount(fetchTodosFromLocalStorage);
+
+	createEffect(updateTodosInLocalStorage);
 
 	return (
 		<>
 			<h1>Your Todos</h1>
 
-			<button onClick={addTodo}>add todo</button>
+			<form onSubmit={addTodo}>
+				<input
+					value={newTodo()}
+					onInput={(e) => setNewTodo(e.currentTarget.value)}
+					placeholder="type your new todo here..."
+				/>
+				<button type="submit">add todo</button>
+			</form>
 
 			<Show
 				when={todos().length}
